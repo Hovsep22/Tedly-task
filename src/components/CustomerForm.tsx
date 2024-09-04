@@ -6,8 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CustomerSchemaType, customerSchema, editCustomerSchema } from '@/schema/customer';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import eye from '../images/Eye.svg';
+import eyeOff from '../images/EyeOff.svg';
+import Image from 'next/image';
 
 type FormType = 'create' | 'edit';
 
@@ -43,8 +46,22 @@ function CustomerForm({ type = 'create', onSubmit, defaultValues, rootError }: C
     if (onSubmit(data)) reset();
   };
 
+  const [password, setPassword] = useState('');
+  const [typePas, setTypePas] = useState('password');
+  const [icon, setIcon] = useState(eyeOff);
+
+  const handleToggle = () => {
+    if (typePas === 'password') {
+      setIcon(eye);
+      setTypePas('text');
+    } else {
+      setIcon(eyeOff);
+      setTypePas('password');
+    }
+  };
+
   return (
-    <Container >
+    <Container>
       <h1 className="mb-10 text-xl font-bold">
         {type === 'create' ? 'Add Customer' : 'Edit Customer'}
       </h1>
@@ -97,13 +114,19 @@ function CustomerForm({ type = 'create', onSubmit, defaultValues, rootError }: C
         />
 
         {type === 'create' && (
-          <InputWithLabel
-            {...register('password')}
-            type="password"
-            id="password"
-            label="Password"
-            error={errors?.password?.message}
-          />
+          <div className="mb-4 flex">
+            <InputWithLabel
+              {...register('password')}
+              type={typePas}
+              id="password"
+              label="Password"
+              error={errors?.password?.message}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span className="flex justify-around items-center" onClick={handleToggle}>
+              <Image className="absolute mr-10 mt-5" src={icon} alt="eye" />
+            </span>
+          </div>
         )}
 
         {rootError && <p className="text-red-500">{rootError}</p>}
