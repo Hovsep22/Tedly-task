@@ -46,7 +46,6 @@ function CustomerForm({ type = 'create', onSubmit, defaultValues, rootError }: C
     if (onSubmit(data)) reset();
   };
 
-  const [password, setPassword] = useState('');
   const [typePas, setTypePas] = useState('password');
   const [icon, setIcon] = useState(eyeOff);
 
@@ -114,17 +113,16 @@ function CustomerForm({ type = 'create', onSubmit, defaultValues, rootError }: C
         />
 
         {type === 'create' && (
-          <div className="mb-4 flex">
+          <div className="mb-4 flex relative">
             <InputWithLabel
               {...register('password')}
               type={typePas}
               id="password"
               label="Password"
               error={errors?.password?.message}
-              onChange={(e) => setPassword(e.target.value)}
             />
             <span className="flex justify-around items-center" onClick={handleToggle}>
-              <Image className="absolute mr-10 mt-5" src={icon} alt="eye" />
+              <Image className="absolute top-[25px] right-[10px]" src={icon} alt="eye" />
             </span>
           </div>
         )}
